@@ -33,6 +33,7 @@ echo "${BLUE}== argp-standalone ==${RESET}"
 
 pushd deps/argp-standalone/argp-standalone
 patch -N <../patch-argp-fmtstream.h || echo "Patch not needed."
+patch -N <../arg-parse.c.patch || echo "Patch not needed."
 ./configure --prefix ${SYSROOT}
 make install
 cp libargp.a ${SYSROOT}/lib/
