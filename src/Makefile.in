@@ -28,37 +28,56 @@ RESET=`tput sgr0`
 
 CBOR_DIR = ../deps/cbor-lite
 
-COMPILER = g++
+# COMPILER = g++
 CFLAGS += --debug -O0
-CXXFLAGS += -std=c++17 -stdlib=libc++ --debug -O0 -I"$(CBOR_DIR)/include"
+CXXFLAGS += -std=c++17 --debug -O0 -I"$(CBOR_DIR)/include" -I"../deps/bc-bytewords/src"
+ifeq ($(GXX), no)
+	# clang 
+	CXXFLAGS +=  -stdlib=libc++ 
+endif
 
 toolname = bytewords
 
-.PHONY: all
-all: $(toolname)
-
-OBJS = \
-	$(toolname).o \
-	utils.o \
-	params.o
-
-LDLIBS += -lstdc++ -lbc-bytewords -largp -lbc-crypto-base
-
+# LDFLAGS += -L../deps/argp-standalone/argp-standalone -L../deps/bc-bytewords/src -L../deps/bc-crypto-base/src 
+LDLIBS += $(LDFLAGS) -lm -lstdc++ -lbc-bytewords -largp -lbc-crypto-base
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
-    LDLIBS += -lm -lc++ -lc++abi -lgcc_s -lgcc
-else ifeq ($(findstring MINGW64, $(UNAME)), MINGW64)
-    # on windows building with msys2/mingw64
-    LDLIBS += -lm -lc++ -lws2_32
-else
-    LDLIBS += -lstdc++
+	# TODO(nochiel) I don't think these flags are needed anymore. Verify that we can leave it out.
+	# https://libcxx.llvm.org//UsingLibcxx.html#using-libc-on-linux 
+	# LDLIBS += -lc++ -lc++abi -lgcc_s -lgcc
+else ifeq ($(findstring MINGW64, $(UNAME)), MINGW64) 
+	# on windows building with msys2/mingw64 
+	LDLIBS += -lc++ -lws2_32
 endif
 
-$(toolname): $(OBJS)
+libargp.a:
+	cd ../deps/argp-standalone/argp-standalone && make
+	cp ../deps/argp-standalone/argp-standalone/libargp.a ./
+
+libbc-crypto-base.a:
+	cd ../deps/bc-crypto-base && make
+	cp ../deps/bc-crypto-base/src/libbc-crypto-base.a ./
+
+libbc-bytewords.a: libbc-crypto-base.a
+	cd ../deps/bc-bytewords && make LDFLAGS=-L../../bc-crypto-base/src
+	cp ../deps/bc-bytewords/src/libbc-bytewords.a ./
 
 $(toolname).o: params.hpp utils.hpp
 utils.o: utils.hpp
 params.o: params.hpp utils.hpp config.h
+
+OBJS = \
+	$(toolname).o \
+	utils.o \
+	params.o \
+	libargp.a \
+	libbc-bytewords.a \
+	libbc-crypto-base.a
+
+$(toolname): $(OBJS)
+
+.PHONY: all
+all: $(toolname)
 
 bindir = $(DESTDIR)/$(prefix)/bin
 

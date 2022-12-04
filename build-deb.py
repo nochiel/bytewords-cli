@@ -1,3 +1,4 @@
+#!/bin/env python3
 # Ref. https://devmanual.gentoo.org/general-concepts/autotools/index.html
 
 # TODO(nochiel) Dependencies (submodules) should be in the makefile. Should I use a Makefile.am?
@@ -30,13 +31,18 @@ except subprocess.CalledProcessError as e:
 
 # Checkout the latest tag for this build.
 filename = f'{package_name}_{version}'
-subprocess.run(['git', 'worktree', 'add', f'../{package_name}-{version}', version])
+subprocess.run(['git', 'worktree', 'add', '-f', f'../{package_name}-{version}', version])
 os.chdir(f'../{package_name}-{version}')
 
+# Make a list of the files and directories we want. 
 # Exclude: .git/, .gitignore
 # Include: deps/
 # subprocess.run(['tar', 'cvzf', f'../{filename}.tar.gz', '.'])
 subprocess.run(['git', 'submodule', 'init'])
 subprocess.run(['git', 'submodule', 'update'])
 subprocess.run(['dh_make', '-y', '-s', '--createorig'],
-            env = env)
+               env = env)
+
+# TODO(nochiel) Install build dependencies and required dependencies.
+
+subprocess.run(['dpkg-buildpackage', '-us', '-uc'])

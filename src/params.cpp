@@ -137,7 +137,7 @@ struct argp_option options[] = {
     { 0 }
 };
 
-auto argp_program_version = PACKAGE_VERSION;
+// auto argp_program_version = PACKAGE_VERSION; // FIXME(nochiel)
 const char* argp_program_bug_address = "ChristopherA@BlockchainCommons.com. © 2020 Blockchain Commons";
 
 auto doc = "Converts data to and from Bytewords encoding.";
