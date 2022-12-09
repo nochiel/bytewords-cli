@@ -47,8 +47,7 @@ if [[ ! -d deps ]];then
     AC_MSG_ERROR("Please run "git submodule init && git submodule update" to check out required dependencies.")
 fi
 
-AC_CONFIG_SUBDIRS([deps/argp-standalone/argp-standalone  
-                   deps/bc-crypto-base 
+AC_CONFIG_SUBDIRS([deps/bc-crypto-base 
                    deps/bc-bytewords])
 
 AC_OUTPUT
