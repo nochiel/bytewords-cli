@@ -64,9 +64,9 @@ except Exception as e:
         raise e
 
 os.chdir('..')
-# os.chdir('../bc-crypto-base')
+os.chdir('bc-crypto-base')
 # subprocess.run(['git', 'remote', 'add', 'origin', 'https://github.com/nochiel/bc-crypto-base.git'])
-# subprocess.run(['git', 'checkout', 'build-deb'])
+subprocess.run(['git', 'checkout', 'master'])
 
 # Create an archive to use for the package.
 os.chdir('..')
