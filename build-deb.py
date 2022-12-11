@@ -46,7 +46,7 @@ subprocess.run(['git', 'submodule', 'update'])
 os.chdir('deps')
 
 os.chdir('argp-standalone')
-subprocess.run(['git', 'remote', 'add', 'nochiel', 'https://github.com/nochiel/argp-standalone.git'])
+subprocess.run(['git', 'remote', 'add', 'nochiel', f'file://{os.getcwd()}/../bytewords-cli/deps/argp-standalone.git'])
 subprocess.run(['git', 'fetch', 'nochiel', 'build-deb'])
 try:
     subprocess.run(['git', 'checkout', 'nochiel/build-deb'])
@@ -56,7 +56,7 @@ except Exception as e:
 os.chdir('..')
 
 os.chdir('bc-bytewords')
-subprocess.run(['git', 'remote', 'add', 'nochiel', 'https://github.com/nochiel/bc-bytewords.git'])
+subprocess.run(['git', 'remote', 'add', 'nochiel', f'file://{os.getcwd()}/../bytewords-cli/deps/bc-bytewords.git'])
 subprocess.run(['git', 'fetch', 'nochiel', 'build-deb'])
 try:
     subprocess.run(['git', 'checkout', 'nochiel/build-deb'])
@@ -67,6 +67,7 @@ os.chdir('..')
 os.chdir('bc-crypto-base')
 # subprocess.run(['git', 'remote', 'add', 'origin', 'https://github.com/nochiel/bc-crypto-base.git'])
 subprocess.run(['git', 'checkout', 'master'])
+os.chdir('..')
 
 # Create an archive to use for the package.
 os.chdir('..')

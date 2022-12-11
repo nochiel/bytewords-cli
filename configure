@@ -4126,12 +4126,6 @@ printf "%s\n" "no" >&6; }
 fi
 
 
-# Checks for libraries.
-# TODO(nochiel) How to check for
-# - libm?
-# - libstdc++
-#
-
 # Checks for header files.
 
 ac_header= ac_cache=
