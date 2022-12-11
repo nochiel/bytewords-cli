@@ -7,7 +7,7 @@
 #  Licensed under the "BSD-2-Clause Plus Patent License"
 #
 
-# Package-specific substitution variables
+# Package-specific substitution variablesr
 package = @PACKAGE_NAME@
 version = @PACKAGE_VERSION@
 tarname = @PACKAGE_TARNAME@
@@ -29,7 +29,7 @@ RESET=`tput sgr0`
 CBOR_DIR = ../deps/cbor-lite
 
 # COMPILER = g++
-CFLAGS += --debug -O0
+CFLAGS += --debug -O0 -I"../deps/bc-bytewords/src"
 CXXFLAGS += -std=c++17 --debug -O0 -I"$(CBOR_DIR)/include" -I"../deps/bc-bytewords/src"
 ifeq ($(GXX), no)
 	# clang 
